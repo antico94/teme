@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block base %}
+    <div class="login-page">
+        <div class="form">
+
+            <form class="register" method="post">
+                <input type="text" placeholder="email address" name="email" required/>
+                <input type="password" placeholder="password" name="password" required/>
+                <p class="message">Already registered? <a href='{{ url_for('login') }}'>Sign In</></p>
+                <button>create</button>
+                {% if existance %}
+                    <h4>E-mail has an account associated</h4>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

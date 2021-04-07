@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block base %}
+
+<div class="login-page">
+    <div class="form">
+        {% if is_logged_in %}
+            <h1><p class="message">Welcome to the index page, {{ email }}!</p></h1>
+            <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+        {% else %}
+            <h3>Hello there, do you want to login?</h3>
+            <a href='{{ url_for('login') }}'><button>Login</button></a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+

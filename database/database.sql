@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users
+(
+
+	email CHARACTER VARYING(255),
+	password CHARACTER VARYING(1000)
+);
+
+
+INSERT INTO users
+VALUES ('john@doe.com', '$2b$12$/TYFvXOy9wDQUOn5SKgTzedwiqB6cm.UIfPewBnz0kUQeK9Eu4mSC');
+
