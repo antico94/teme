@@ -63,18 +63,18 @@ def logout():
 
 @app.route('/test')
 def test():
-    answer = request.cookies.get('question_answer')
-    if session['question_id'] == get_number_of_questions()['count']:
-        compared_question = get_next_question(session['question_id'] - 1)
-        if answer == compared_question['answer']:
-            session['correct_results'] += 1
-        return redirect(url_for('result'))
-    if session['question_id'] !=0:
-        compared_question= get_next_question(session['question_id']-1)
-        if answer == compared_question['answer']:
-            session['correct_results'] += 1
-    question = get_next_question(session['question_id'])
-    return render_template('test.html', question=question)
+    if 'email' in session:
+        answer = request.cookies.get('question_answer')
+        if session['question_id'] !=0:
+            compared_question= get_next_question(session['question_id']-1)
+            if answer == compared_question['answer']:
+                session['correct_results'] += 1
+        if session['question_id'] == get_number_of_questions()['count']:
+            return redirect(url_for('result'))
+        question = get_next_question(session['question_id'])
+        return render_template('test.html', question=question)
+    else:
+        return redirect(url_for('index'))
 
 
 @app.route('/result')
@@ -82,7 +82,6 @@ def result():
     number_of_questions = get_number_of_questions()['count']
     return render_template('result.html', correct_answer=session['correct_results'],
                            number_of_questions=number_of_questions)
-
 
 @app.route('/set-cookie', methods=['POST', 'GET'])
 def setcookie():
