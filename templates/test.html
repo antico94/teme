@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block base %}
+    <div class="login-page">
+
+        <form action="{{ url_for('setcookie') }}" method="post">
+            <h2>{{ question.get('title') }}</h2>
+            <input type="radio" name="answer" value="a">
+            <label for="question1">{{ question.get('a') }}</label><br>
+            <input type="radio" name="answer" value="b">
+            <label for="question2">{{ question.get('b') }}</label><br>
+            <input type="radio" name="answer" value="c">
+            <label for="question3">{{ question.get('c') }}</label><br>
+            <input type="radio" name="answer" value="d">
+            <label for="question4">{{ question.get('d') }}</label><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+{% endblock %}

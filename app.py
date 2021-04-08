@@ -30,6 +30,8 @@ def login():
         is_matching = verify_password(password, db_password)
         if is_matching:
             session['email'] = email
+            session['question_id'] = 0
+            session['correct_results'] = 0
             return redirect(url_for('index'))
         else:
             return render_template("login.html", is_not_matching=True)
@@ -54,15 +56,43 @@ def register():
 def logout():
     # remove the username from the session if it's there
     session.pop('email', None)
+    session.pop('question_id', None)
+    session.pop('correct_results', None)
     return redirect(url_for('index'))
 
 
-@app.route('/set-cookie')
-def cookie_insertion():
-    redirect_to_index = redirect(url_for("login"))
-    response = make_response(redirect_to_index)
-    response.set_cookie('GABRIELUL', value='Gabrielealea')
-    return response
+@app.route('/test')
+def test():
+    answer = request.cookies.get('question_answer')
+    if session['question_id'] == get_number_of_questions()['count']:
+        compared_question = get_next_question(session['question_id'] - 1)
+        if answer == compared_question['answer']:
+            session['correct_results'] += 1
+        return redirect(url_for('result'))
+    if session['question_id'] !=0:
+        compared_question= get_next_question(session['question_id']-1)
+        if answer == compared_question['answer']:
+            session['correct_results'] += 1
+    question = get_next_question(session['question_id'])
+    return render_template('test.html', question=question)
+
+
+@app.route('/result')
+def result():
+    number_of_questions = get_number_of_questions()['count']
+    return render_template('result.html', correct_answer=session['correct_results'],
+                           number_of_questions=number_of_questions)
+
+
+@app.route('/set-cookie', methods=['POST', 'GET'])
+def setcookie():
+    if request.method == 'POST':
+        user_answer = request.form['answer']
+        session['question_id'] += 1
+        redirect_to_index = redirect(url_for('test'))
+        response = make_response(redirect_to_index)
+        response.set_cookie('question_answer', value=user_answer)
+        return response
 
 
 if __name__ == '__main__':
